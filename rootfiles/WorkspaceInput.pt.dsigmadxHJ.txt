@@ -1,0 +1,10 @@
+Nominal,dsigmadxHJ                  0.020740            0.014063            0.005382            0.001295           
+MCStat_dsigmadx,Sym                 0.538372            0.415824            0.442428            0.573414           
+PDF_dsigmadx_shape,Down            -1.431550           -1.123522           -0.622362           -0.591022           
+PDF_dsigmadx_shape,Up               2.406155            2.087253            1.664853            1.637722           
+PDF_dsigmadx_norm,Down             -6.810538           -6.543067           -5.966532           -5.504385           
+PDF_dsigmadx_norm,Up                7.395109            7.080831            6.400281            5.848241           
+QCD_dsigmadx_shape,Down            -4.545245           -2.288396           -3.072222           -5.428784           
+QCD_dsigmadx_shape,Up               5.056213            1.147946            2.792545            3.837660           
+QCD_dsigmadx_norm,Down             -7.654228           -7.215426           -6.258793           -5.486670           
+QCD_dsigmadx_norm,Up                7.064445            6.654154            5.748792            4.981337           

@@ -1,0 +1,70 @@
+!
+!  Settings from Amanda Kruse
+!  slightly modified by Dag
+!
+
+! 1) Settings used in the main program.
+Main:numberOfEvents = 100000       ! number of events to generate
+Main:timesAllowErrors = 3          ! abort run after this many flawed events
+Random:setSeed = on                ! set the seed by hand
+Main:numberToList = 0              ! number of events to print
+Main:timesToShow = 100             ! show how far along run is
+Main:showChangedSettings = on      ! print changed flags/modes/parameters
+Main:showChangedParticleData = on  ! print changed particle and decay data
+
+! 2) Beam parameter settings. Values below agree with default ones.
+Beams:idA = 2212                   ! first beam, p = 2212, pbar = -2212
+Beams:idB = 2212                   ! second beam, p = 2212, pbar = -2212
+Beams:eCM = 8000                   ! CM energy of collision
+
+! 3) Settings for the hard-process generation.
+HiggsSM:all = off                  ! turn off all Higgs production processes
+HiggsSM:gg2Httbar = on             ! gg -> Httbar
+HiggsSM:qqbar2Httbar = on
+PhaseSpace:pTHatMin = 0            ! minimum pT in the phase-space generation (NOT specified in fullsim samples)
+
+! 4) Settings for the event generation process in the Pythia8 library.
+PartonLevel:ISR = on               ! no initial-state radiation
+PartonLevel:FSR = on               ! no final-state radiation
+PartonLevel:MPI = on               ! no multiple interactions
+HadronLevel:Hadronize = on         ! no hadronization
+!24:onMode = off                   ! turn off W decays
+!23:onMode = off                   ! turn off Z decays
+
+! 5) PDF sets, tunes etc.
+Tune:pp = 5                        ! the set of tunes to use (overwrites the PDF set) (default is Tune:pp=5)
+!Tune:pp = 7                       ! ATLAS Tune A2 (based on tune 4Cx, but without rapidity-ordered spacelike emissions)
+!Tune:pp = 11                      ! use Tune CT10
+
+PDF:useLHAPDF = on
+PDF:LHAPDFset = cteq6ll.LHpdf
+SpaceShower:rapidityOrder=0
+
+! 6) Change the particle properties
+! Higgs mass and decays
+25:m0 = 125                         ! set Higgs mass
+25:mWidth = 0.00407
+25:doForceWidth = true
+
+25:mayDecay = On                    ! off = don't allow the Higgs to decay
+25:onMode = off                     ! turn off all Higgs decays
+25:onIfMatch = 23 23                ! turn back on gamgam?
+!TimeShower:QEDshowerByGamma = off   ! turn off Pythia's internal Dalitz decays: gam -> f fbar gam
+23:onMode = off                     ! turn off all Z0 decays
+23:mMin = 2.0                       ! ?
+23:onIfMatch = 11 -11               ! turn on ee
+23:onIfMatch = 13 -13               ! turn on mm
+23:mMin = 2.0                       ! Minimum mass is 2.0! Default I think is 10.0!
+
+ParticleDecays:limitTau0 = on
+ParticleDecays:Tau0Max = 10.0
+
+! from Pythia8_Base_Fragment.py
+6:m0 = 172.5
+23:m0 = 91.1876
+23:mWidth = 2.4952
+24:m0 = 80.399
+24:mWidth = 2.085
+StandardModel:sin2thetaW = 0.23113
+StandardModel:sin2thetaWbar = 0.23146
+
