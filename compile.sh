@@ -1,6 +1,6 @@
 #!/bin/sh
 
-swdir=/home/kurb/testarea/Minlo
+swdir=`pwd`/../
 
 code=zz_powheg_Hjets.C
 code2=get_pdfreweight.C
@@ -29,8 +29,8 @@ libs+=" -L$swdir/lhapdf/lib -lLHAPDF"
 #libs+=" -L/afs/cern.ch/sw/lcg/external/MCGenerators/lhapdf/5.8.9/x86_64-slc5-gcc43-opt/lib/archive -lLHAPDF"
 #libs+=" -L/afs/cern.ch/sw/lcg/external/MCGenerators/lhapdf/5.8.9/x86_64-slc6-gcc46-opt/lib/archive -lLHAPDF"
 libs+=" -L$swdir/HepMC/lib -lHepMC -lgfortran -lgfortranbegin"
-libs+=" -L$swdir/Boost/lib -lboost_filesystem"
-libs+=" -L$swdir/Yaml/lib -lyaml-cpp"
+#libs+=" -L$swdir/Boost/lib -lboost_filesystem"
+#libs+=" -L$swdir/Yaml/lib -lyaml-cpp"
 
 # code=Pythia8_LHE_to_HEPMC2.cc
 # exec=${code/cc/exe}

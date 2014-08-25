@@ -8,18 +8,17 @@ source /cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/user/atlasLocalSetup.sh
 
 # setupLOCAL 
 localSetupROOT --skipConfirm
+localSetupPython 2.6.5p1-x86_64-slc5-gcc43
 
-export swdir=/home/kurb/testarea/Minlo
+export swdir=`pwd`/../
 
 export LD_LIBRARY_PATH=$swdir/HepMC/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$swdir/Boost/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$swdir/lhapdf/lib:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$swdir/Yaml/lib:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$swdir/fastjet/lib:$LD_LIBRARY_PATH
 
 # export LHAPATH=$swdir/LHApdf/share/LHAPDF/
 # export LHAPATH=/afs/cern.ch/sw/lcg/external/MCGenerators/lhapdf/5.8.9/share/lhapdf/PDFsets/
 export LHAPATH=$swdir/lhapdf/share/lhapdf/PDFsets
 
-export PATH=/home/kurb/testarea/Minlo/fastjet/bin:$PATH
-export PATH=/home/kurb/testarea/Minlo/lhapdf/bin:$PATH
+export PATH=$swdir/fastjet/bin:$PATH
+export PATH=$swdir/lhapdf/bin:$PATH
