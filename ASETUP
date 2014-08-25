@@ -22,3 +22,5 @@ export LHAPATH=$swdir/lhapdf/share/lhapdf/PDFsets
 
 export PATH=$swdir/fastjet/bin:$PATH
 export PATH=$swdir/lhapdf/bin:$PATH
+
+export PYTHONPATH=$swdir/genericUtils/python:$PYTHONPATH

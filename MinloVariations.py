@@ -2,9 +2,10 @@
 
 import os
 from ROOT import gROOT,TFile,TH1F,TGraphAsymmErrors,gDirectory,TH1,kFALSE,kRed,kAzure,kOrange
-gROOT.LoadMacro("rootlogon.C")
-from ROOT import rootlogon
-rootlogon()
+import __main__
+if gROOT.LoadMacro("rootlogon.C") != 0 :
+    from ROOT import rootlogon
+    rootlogon()
 from PlotUtils import PlotObject
 from PyGenericUtils import GetRootObj,GetFile,CleanNameForMacro
 import math
