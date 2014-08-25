@@ -33,7 +33,6 @@ source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
 localSetupROOT --skipConfirm
 cd %s
 source ASETUP
-cd %s
 ./zz_powheg_hgg.exe pythia_settings/%s.cmnd GENERATE %d %s/var/out/%s.root
 
 
@@ -46,7 +45,7 @@ def WriteVariations(variations,process,nfiles,nevents) :
             tag = '%s_%04d'%(v,i)
             submit_name = "var/submit/%s.sh" % tag
             with open(submit_name, "w") as sub:
-                sub.write(submitTemplate % (swdir,os.getcwd(),process,nevents,os.getcwd(),tag))
+                sub.write(submitTemplate % (os.getcwd(),process,nevents,os.getcwd(),tag))
                 #                           cd %s,cd %s      ,%s.cmnd, %d    ,%s/var/    ,%s.root
             st = os.stat(submit_name).st_mode
             os.chmod(submit_name, st | stat.S_IEXEC)

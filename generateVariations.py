@@ -36,7 +36,6 @@ source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
 localSetupROOT --skipConfirm
 cd %s
 source ASETUP
-cd %s
 ./zz_powheg_hgg.exe pythia_settings/zz_nominal.cmnd /disk/userdata00/atlas_data2/kurb/Minlo/data/LesHouches/%s/%s/pwgevents-%04d.lhe -1 %s/var/out/%s.root
 
 
@@ -49,7 +48,7 @@ def WriteVariations(variations,process,nfiles) :
             tag = '%s_%04d'%(v,i)
             submit_name = "var/submit/%s.sh" % tag
             with open(submit_name, "w") as sub:
-                sub.write(submitTemplate % (swdir,os.getcwd(),process,v,i,os.getcwd(),tag))
+                sub.write(submitTemplate % (os.getcwd(),process,v,i,os.getcwd(),tag))
             st = os.stat(submit_name).st_mode
             os.chmod(submit_name, st | stat.S_IEXEC)
             doEmail = '-N -u \"kurt.brendlinger@gmail.com\"' if (i == nfiles) else ''
