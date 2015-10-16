@@ -27,7 +27,7 @@ gROOT.SetBatch(True)
 ## histbins: e.g. (100,0,200)
 ## quantity options: diff, fid, eff, gen
 ##
-def GetMyPlot(tree,var,histbins,cross_section,quantity='diff',weight_str='weight') :
+def GetMyPlot(tree,var,histbins,newbinning,cross_section,quantity='diff',weight_str='weight') :
 
     # old way
 #     br_2mu2e = 0.0000593*2. # multiply by 2 because 1/2 of the integral is not 2mu2e
@@ -62,17 +62,21 @@ def GetMyPlot(tree,var,histbins,cross_section,quantity='diff',weight_str='weight
     # Quantity (or numerator)
     #
     full_weight = weight_str
+    numnewbins = len(newbinning)-1
+    binarray = array('d',newbinning)
     if quantity in ['diff','eff','fid'] : 
         full_weight += '*PassesCuts'
     full_weight += '*(is2mu2e*(%2.4fe-8)+(1-is2mu2e)*(%2.4fe-8))'%(w_2mu2e*1e8,w_4mu4e*1e8)
 
     tree.Draw('%s>>h1%s'%(var,histbins),full_weight,'egoff')
     h1 = gDirectory.Get('h1')
+    h1 = h1.Rebin(numnewbins,"h1",binarray)
 
     if quantity == 'eff' :
         full_weight = full_weight.replace('*PassesCuts','')
         tree.Draw('%s>>Den%s'%(var,histbins),full_weight,'egoff')
         Den = gDirectory.Get('Den')
+        Den = Den.Rebin(numnewbins,"Den",binarray)
         h1.Divide(h1,Den,1,1,'B')
         gROOT.ProcessLine('delete Den')
         
@@ -165,6 +169,7 @@ def main(ops,args) :
             h1 = GetMyPlot(e
                            ,VarProps[i]['MyDrawStr']
                            ,VarProps[i]['BinStr']
+                           ,VarProps[i]['Bins']
                            ,CrossSections.get(v)
                            ,quantity=ops.quantity
                            )
@@ -433,6 +438,7 @@ def main(ops,args) :
                 h1 = GetMyPlot(e
                                ,VarProps[i]['MyDrawStr'] ## var name in tree
                                ,VarProps[i]['BinStr'] ## hist bins
+                               ,VarProps[i]['Bins']
                                ,CrossSections.get(v)
                                ,quantity=ops.quantity
                                ,weight_str=weight_str
