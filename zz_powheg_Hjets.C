@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "Pythia8/Pythia.h"
-#include "Pythia8/Pythia8ToHepMC.h"
+#include "Pythia8Plugins/HepMC2.h"
 
 #include "fastjet/PseudoJet.hh"
 #include "fastjet/ClusterSequence.hh"
@@ -11,11 +11,39 @@
 #include "event_display.h"
 #include <TSystem.h>
 
-#include "PDFTool.h"
+#include "LHAPDF/LHAPDF.h"
+//#include "PDFTool.h"
 
 using fastjet::PseudoJet;
 using namespace Pythia8;
 using namespace std;
+
+class Scaling : public PDF{
+public:
+  Scaling(int idBeamIn = 2212) : PDF(idBeamIn) {}
+
+private:
+  void xfUpdate(int id, double x, double Q2);
+};
+void Scaling::xfUpdate(int, double x, double ) {
+  double dv  = 4. * x * pow3(1. - x);
+  double uv  = 2. * dv;
+  double gl  = 2.  * pow5(1. - x);
+  double sea = 0.4 * pow5(1. - x);
+  xg    = gl;
+  xu    = uv + 0.18 * sea;
+  xd    = dv + 0.18 * sea;
+  xubar = 0.18 * sea;
+  xdbar = 0.18 * sea;
+  xs    = 0.08 * sea;
+  xc    = 0.04 * sea;
+  xb    = 0.02 * sea;
+  xuVal = uv;
+  xuSea = xubar;
+  xdVal = dv;
+  xdSea = xdbar;
+  idSav = 9;
+};
 
 /***************************************
  *     Hard-coded settings (for now)
@@ -69,14 +97,14 @@ vector<MCpart> ElectronMuonCuts(vector<MCpart> leps);
 
 int main(int argc, char* argv[]) {
   printf("\n=~=~=~=~=~=~=~=~=~=~=\n  POWHEG HJETS\n");
-
+/*
   printf("Setting up PDFTool\n");
   PDFTool* pdftool = new PDFTool(4000000.,1,-1,10800); // do not set reweightPdf
   //pdftool->setPdfset(10800); // set initial pdfset
   //MSTW2008nlo90cl         21141
   //NNPDF23_nlo_as_0118    229800
   printf("Setting up PDFTool done.\n");
-
+*/
   //
   // Arguments
   //
@@ -126,7 +154,10 @@ int main(int argc, char* argv[]) {
     in_fn     = gSystem->BaseName(ifn);
     scale_str = gSystem->BaseName(Str(ifn).ReplaceAll              ("/"+in_fn,""));
     process   = gSystem->BaseName(Str(ifn).ReplaceAll("/"+scale_str+"/"+in_fn,""));
-    file_num = atoi(in_fn(in_fn.First('-')+1,4).Data());
+    file_num = atoi(in_fn(in_fn.First('_')+1,4).Data());
+    //scale_str = "ggH_1_1";
+    //process = "VBF_H";
+    //file_num = 20;
     std::cout << "LHE file : " << ifn << std::endl;
     std::cout << "in_fn    : " << in_fn << std::endl;
     std::cout << "scale_str: " << scale_str << std::endl;
@@ -141,11 +172,15 @@ int main(int argc, char* argv[]) {
   else if (process=="VBF_H"  ) Npartons=3;
   // mine
   else if (process=="ggH"            ) Npartons=1;
+  else if (process=="ggH_12509"      ) Npartons=1;
+  else if (process=="ggH8TeV"        ) Npartons=1;
   else if (process=="ggH_hfact"      ) Npartons=1;
   else if (process=="gg_H_hfact"     ) Npartons=1;
   else if (process=="minlo_HJ_mH125" ) Npartons=2;
   else if (process=="minlo_HJJ_mH125") Npartons=3;
   else if (process=="VBFH125"        ) Npartons=3;
+  else if (process=="VBF_12509"      ) Npartons=3;
+  else if (process=="VBF8TeV"        ) Npartons=3;
   // more
   else if (process=="WH")  Npartons=2;
   else if (process=="ZH")  Npartons=2;
@@ -195,13 +230,20 @@ int main(int argc, char* argv[]) {
     pythia.init();
   }
   else {
-    pythia.init(argv[2]);
+    pythia.readString("Beams:frameType = 4");
+    PDF* pdfAPtr = new Scaling(2212);
+    PDF* pdfBPtr = new Scaling(2212);
+    pythia.setPDFPtr(pdfAPtr,pdfBPtr);
+    pythia.readString("Beams:eCM = 13000.");
+    pythia.readString(Form("Beams:LHEF = %s",argv[2]));
+    pythia.init();
   }
   if (nEvents == -1) nEvents=pythia.mode("Main:numberOfEvents");
   pythia.settings.listChanged();
   
   printf("  N events to process:        %d\n",nEvents);
   Event& event = pythia.event;
+  std::cout<<"Test N events to process:\t"<<event.size()<<std::endl;
   // Event& event_partons = pythia_partons.event; 
 
   vector<PseudoJet> stbl_ptcls;
@@ -261,14 +303,37 @@ int main(int argc, char* argv[]) {
   TotalEvents->GetXaxis()->SetBinLabel(1,"2mu2e");
   TotalEvents->GetXaxis()->SetBinLabel(2,"4e/4mu");
 
-  TH1F* EventType = new TH1F("event_type","event_type",7,0,7);
+  TH1F* EventType = new TH1F("event_type","event_type",8,0,8);
+  EventType->Sumw2();
   EventType->GetXaxis()->SetBinLabel(1,"4mu");
   EventType->GetXaxis()->SetBinLabel(2,"2mu2e");
   EventType->GetXaxis()->SetBinLabel(3,"4e");
-  EventType->GetXaxis()->SetBinLabel(4,"4tau");
-  EventType->GetXaxis()->SetBinLabel(5,"2tau2mu");
-  EventType->GetXaxis()->SetBinLabel(6,"2tau2e");
-  EventType->GetXaxis()->SetBinLabel(7,"Unknown");
+  EventType->GetXaxis()->SetBinLabel(4,"2e2mu");
+  EventType->GetXaxis()->SetBinLabel(5,"4tau");
+  EventType->GetXaxis()->SetBinLabel(6,"2tau2mu");
+  EventType->GetXaxis()->SetBinLabel(7,"2tau2e");
+  EventType->GetXaxis()->SetBinLabel(8,"Unknown");
+
+  TH1F* EventTypeJPsi = new TH1F("event_type_jpsi","event_type_jpsi",8,0,8);
+  EventTypeJPsi->Sumw2();
+  EventTypeJPsi->GetXaxis()->SetBinLabel(1,"4mu");
+  EventTypeJPsi->GetXaxis()->SetBinLabel(2,"2mu2e");
+  EventTypeJPsi->GetXaxis()->SetBinLabel(3,"4e");
+  EventTypeJPsi->GetXaxis()->SetBinLabel(4,"2e2mu");
+  EventTypeJPsi->GetXaxis()->SetBinLabel(5,"4tau");
+  EventTypeJPsi->GetXaxis()->SetBinLabel(6,"2tau2mu");
+  EventTypeJPsi->GetXaxis()->SetBinLabel(7,"2tau2e");
+  EventTypeJPsi->GetXaxis()->SetBinLabel(8,"Unknown");
+
+  TH1F* EventTypeFinal = new TH1F("event_type_4leps","event_type_4leps",8,0,8);
+  EventTypeFinal->GetXaxis()->SetBinLabel(1,"4mu");
+  EventTypeFinal->GetXaxis()->SetBinLabel(2,"2mu2e");
+  EventTypeFinal->GetXaxis()->SetBinLabel(3,"4e");
+  EventTypeFinal->GetXaxis()->SetBinLabel(4,"2e2mu");
+  EventTypeFinal->GetXaxis()->SetBinLabel(5,"4tau");
+  EventTypeFinal->GetXaxis()->SetBinLabel(6,"2tau2mu");
+  EventTypeFinal->GetXaxis()->SetBinLabel(7,"2tau2e");
+  EventTypeFinal->GetXaxis()->SetBinLabel(8,"Unknown");
   gROOT->cd();
   
   // Initialize TTree
@@ -305,6 +370,23 @@ int main(int argc, char* argv[]) {
   // For pdf reweighting, to be done later
   MakeFBranches("mcevt_pdf_scale2","mcevt_pdf_x1","mcevt_pdf_x2");
   MakeIBranches("mcevt_pdf_id1","mcevt_pdf_id2");
+  MakeFBranch("weight_0");
+  
+  MakeFBranch("weight_1001");
+  MakeFBranch("weight_1002");
+  MakeFBranch("weight_1003");
+  MakeFBranch("weight_1004");
+  MakeFBranch("weight_1005");
+  MakeFBranch("weight_1006");
+  MakeFBranch("weight_1007");
+  MakeFBranch("weight_1008");
+  MakeFBranch("weight_2001");MakeFBranch("weight_2002");MakeFBranch("weight_2003");MakeFBranch("weight_2004");MakeFBranch("weight_2005");MakeFBranch("weight_2006");MakeFBranch("weight_2007");MakeFBranch("weight_2008");MakeFBranch("weight_2009");MakeFBranch("weight_2010");
+  MakeFBranch("weight_2011");MakeFBranch("weight_2012");MakeFBranch("weight_2013");MakeFBranch("weight_2014");MakeFBranch("weight_2015");MakeFBranch("weight_2016");MakeFBranch("weight_2017");MakeFBranch("weight_2018");MakeFBranch("weight_2019");MakeFBranch("weight_2020");
+  MakeFBranch("weight_2021");MakeFBranch("weight_2022");MakeFBranch("weight_2023");MakeFBranch("weight_2024");MakeFBranch("weight_2025");MakeFBranch("weight_2026");MakeFBranch("weight_2027");MakeFBranch("weight_2028");MakeFBranch("weight_2029");MakeFBranch("weight_2030");
+  MakeFBranch("weight_2031");MakeFBranch("weight_2032");MakeFBranch("weight_2033");MakeFBranch("weight_2034");MakeFBranch("weight_2035");MakeFBranch("weight_2036");MakeFBranch("weight_2037");MakeFBranch("weight_2038");MakeFBranch("weight_2039");MakeFBranch("weight_2040");
+  MakeFBranch("weight_2041");MakeFBranch("weight_2042");MakeFBranch("weight_2043");MakeFBranch("weight_2044");MakeFBranch("weight_2045");MakeFBranch("weight_2046");MakeFBranch("weight_2047");MakeFBranch("weight_2048");MakeFBranch("weight_2049");MakeFBranch("weight_2050");
+  MakeFBranch("weight_2051");MakeFBranch("weight_2052");MakeFBranch("weight_2053");MakeFBranch("weight_2054");MakeFBranch("weight_2055");MakeFBranch("weight_2056");MakeFBranch("weight_2057");MakeFBranch("weight_2058");MakeFBranch("weight_2059");
+  
   
   // _fmap["xsec"] = xsecs[scale_shift_index]; 
   // _imap["Npartons"] = powheg_partons.size();
@@ -370,6 +452,7 @@ int main(int argc, char* argv[]) {
     _fmap["mcevt_pdf_x2"] = mcevt_pdf_x2;
     _imap["mcevt_pdf_id1"] = mcevt_pdf_id1;
     _imap["mcevt_pdf_id2"] = mcevt_pdf_id2;
+/*
     pdftool->setEventInfo(mcevt_pdf_scale2,mcevt_pdf_x1,mcevt_pdf_x2,mcevt_pdf_id1,mcevt_pdf_id2);
     double w_mstw = pdftool->pdf(21141);
     double w_nnpd = pdftool->pdf(229800);
@@ -381,8 +464,55 @@ int main(int argc, char* argv[]) {
       printf("Error! weight is %2.2f. Setting to 0.\n",w_nnpd);
       w_nnpd = 0;
     }
+*/
+     
+    printf(">>>>>>>>>>>>> ");
+    const LHAPDF::PDF* testpdf = LHAPDF::mkPDF("CT14nlo",0);
+    //const LHAPDF::PDF* testpdf = LHAPDF::mkPDF("cteq6l1",0);
+    const double xf = testpdf->xfxQ2(mcevt_pdf_id1,mcevt_pdf_x1,mcevt_pdf_scale2);
+    printf("<<<<<<<<<<<<< xf = %2.5f >>>>>>>>>>>>>>\n",xf);
+
     _fmap["weight"] = pythia.info.weight();
+    double mergingweight = pythia.info.mergingWeight();
     double weight = _fmap["weight"];
+    
+    int nwgt = pythia.info.getWeightsDetailedSize();
+    printf("<<<<<<<<<<<<< weight = %2.5f >>>>>>>>>>>>>>\n",weight);
+    printf("<<<<<<<<<<<<< MergingWeight = %2.5f >>>>>>>>>>>>>>\n",mergingweight);
+    printf("<<<<<<<<<<<<< nwgt = %d >>>>>>>>>>>>>>\n",nwgt);
+    for(int iwgt = 0;iwgt<nwgt;iwgt++){
+      string key;
+      string weight_str;
+      ostringstream convert;
+      double wgt_value = 0;
+      if(iwgt == 0){
+	convert << iwgt;
+	key = convert.str();
+    weight_str = "weight_"+key;
+	wgt_value = pythia.info.getWeightsDetailedValue(key);
+    _fmap[weight_str] = wgt_value;
+      }
+      else if(0<iwgt && iwgt<9){
+	convert << iwgt+1000;
+	key = convert.str();
+    weight_str = "weight_"+key;
+	wgt_value = pythia.info.getWeightsDetailedValue(key);
+    _fmap[weight_str] = wgt_value;
+      }
+      else{
+	convert << 2001+(iwgt-9);
+	key = convert.str();
+    weight_str = "weight_"+key;
+	wgt_value = pythia.info.getWeightsDetailedValue(key);
+    _fmap[weight_str] = wgt_value;
+      }
+//      printf("\twgt id=\'%s\'\t%2.5f\n",key,wgt_value);
+      std::cout<<"\twgt id="<<key<<"\t"<<wgt_value<<std::endl;
+    }
+    
+    double w_mstw = 1.;
+    double w_nnpd = 1.;
+
     _fmap["weight_mstw"] = _fmap["weight"]*w_mstw;
     _fmap["weight_nnpd"] = _fmap["weight"]*w_nnpd;
     if (debug){
@@ -443,12 +573,13 @@ int main(int argc, char* argv[]) {
 	int gd1 = event[event[ptcl.daughter1()].daughter1()].idAbs();
 	int gd2 = event[event[ptcl.daughter2()].daughter1()].idAbs();
 	if (gd1 == 13 && gd2 == 13) EventType->Fill(0.,weight); // 4mu
-	else if ((gd1 == 13 && gd2 == 11) || (gd1 == 11 && gd2 == 13)) EventType->Fill(1.,weight); // 2mu2e
-	else if (gd1 == 11 && gd2 == 11) EventType->Fill(2.,weight); // 4e
-	else if (gd1 == 15 && gd2 == 15) EventType->Fill(3.,weight); // 4tau
-	else if ((gd1 == 15 && gd2 == 13) || (gd1 == 13 && gd2 == 15)) EventType->Fill(4.,weight); // 2tau2mu
-	else if ((gd1 == 15 && gd2 == 11) || (gd1 == 11 && gd2 == 15)) EventType->Fill(5.,weight); // 2tau2e
-	else EventType->Fill(6.,weight); // unknown
+	else if (gd1 == 13 && gd2 == 11) EventType->Fill(1.,weight); // 2mu2e
+	else if (gd1 == 11 && gd2 == 13) EventType->Fill(2.,weight); // 2e2mu
+	else if (gd1 == 11 && gd2 == 11) EventType->Fill(3.,weight); // 4e
+	else if (gd1 == 15 && gd2 == 15) EventType->Fill(4.,weight); // 4tau
+	else if ((gd1 == 15 && gd2 == 13) || (gd1 == 13 && gd2 == 15)) EventType->Fill(5.,weight); // 2tau2mu
+	else if ((gd1 == 15 && gd2 == 11) || (gd1 == 11 && gd2 == 15)) EventType->Fill(6.,weight); // 2tau2e
+	else EventType->Fill(7.,weight); // unknown
       }
       //
       // Two z's from the Higgs (for m34)
@@ -782,8 +913,19 @@ int main(int argc, char* argv[]) {
     if (!is2mu2e_fid && kin_vars[2] <= 5.) PassesCuts = 0;
     if (!is2mu2e_fid && kin_vars[3] <= 5.) PassesCuts = 0;
     if (debug && PassesCuts) printf("Passes jpsi\n");
-    if (PassesCuts) CutFlow->Fill(8.,weight); // J/Psi
-
+    if (PassesCuts){
+      CutFlow->Fill(8.,weight); // J/Psi
+      int gd1 = chosen_born_leptons.at(0).absID();
+      int gd2 = chosen_born_leptons.at(2).absID();
+      if (gd1 == 13 && gd2 == 13) EventTypeJPsi->Fill(0.,weight); // 4mu
+      else if (gd1 == 13 && gd2 == 11) EventTypeJPsi->Fill(1.,weight); // 2mu2e
+      else if (gd1 == 11 && gd2 == 13) EventTypeJPsi->Fill(2.,weight); // 2e2mu
+      else if (gd1 == 11 && gd2 == 11) EventTypeJPsi->Fill(3.,weight); // 4e
+      else if (gd1 == 15 && gd2 == 15) EventTypeJPsi->Fill(4.,weight); // 4tau
+      else if ((gd1 == 15 && gd2 == 13) || (gd1 == 13 && gd2 == 15)) EventTypeJPsi->Fill(5.,weight); // 2tau2mu
+      else if ((gd1 == 15 && gd2 == 11) || (gd1 == 11 && gd2 == 15)) EventTypeJPsi->Fill(6.,weight); // 2tau2e
+      else EventTypeJPsi->Fill(7.,weight); // unknown
+    }
     //
     // m4l
     TLorentzVector H = ((TLorentzVector)chosen_born_leptons[0]+
@@ -795,8 +937,19 @@ int main(int argc, char* argv[]) {
     if (debug) printf("m4l: %2.2f\n",m4l);
     if (!(118. < m4l && m4l < 129.)) PassesCuts = 0;
     if (debug && PassesCuts) printf("Passes m4l!\n");
-    if (PassesCuts) CutFlow->Fill(9.,weight); // m4l
-
+    if (PassesCuts){
+      CutFlow->Fill(9.,weight); // m4l
+      int gd1 = chosen_born_leptons.at(0).absID();
+      int gd2 = chosen_born_leptons.at(2).absID();
+      if (gd1 == 13 && gd2 == 13) EventTypeFinal->Fill(0.,weight); // 4mu
+      else if (gd1 == 13 && gd2 == 11) EventTypeFinal->Fill(1.,weight); // 2mu2e
+      else if (gd1 == 11 && gd2 == 13) EventTypeFinal->Fill(2.,weight); // 2e2mu
+      else if (gd1 == 11 && gd2 == 11) EventTypeFinal->Fill(3.,weight); // 4e
+      else if (gd1 == 15 && gd2 == 15) EventTypeFinal->Fill(4.,weight); // 4tau
+      else if ((gd1 == 15 && gd2 == 13) || (gd1 == 13 && gd2 == 15)) EventTypeFinal->Fill(5.,weight); // 2tau2mu
+      else if ((gd1 == 15 && gd2 == 11) || (gd1 == 11 && gd2 == 15)) EventTypeFinal->Fill(6.,weight); // 2tau2e
+      else EventTypeFinal->Fill(7.,weight); // unknown
+    }
     if (debug) printf("PassesCuts: %d\n",PassesCuts);
     _imap["PassesCuts"] = PassesCuts;
 

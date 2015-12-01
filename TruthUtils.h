@@ -6,7 +6,8 @@
  */
 
 #include "Pythia8/Pythia.h"
-#include "Pythia8/Pythia8ToHepMC.h"
+//#include "Pythia8/Pythia8ToHepMC.h"
+#include "Pythia8Plugins/HepMC2.h"
 #include "TFile.h"
 #include "TTree.h"
 #include "TROOT.h"
