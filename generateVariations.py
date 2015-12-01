@@ -36,7 +36,7 @@ source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
 localSetupROOT --skipConfirm
 cd %s
 source ASETUP
-./zz_powheg_hgg.exe pythia_settings/zz_nominal.cmnd /disk/userdata00/atlas_data2/kurb/Minlo/data/LesHouches/%s/%s/pwgevents-%04d.lhe -1 %s/var/out/%s.root
+./zz_powheg_hgg.exe pythia_settings/zz_nominal.cmnd /disk/userdata00/atlas_data2/bijanh/HZZRun2/LHE/%s/%s/PowhegOTF._%04d.events -1 %s/var/out/%s.root
 
 
 echo done.
@@ -51,7 +51,7 @@ def WriteVariations(variations,process,nfiles) :
                 sub.write(submitTemplate % (os.getcwd(),process,v,i,os.getcwd(),tag))
             st = os.stat(submit_name).st_mode
             os.chmod(submit_name, st | stat.S_IEXEC)
-            doEmail = '-N -u \"kurt.brendlinger@gmail.com\"' if (i == nfiles) else ''
+            doEmail = '-N -u \"bijanh@sas.upenn.edu\"' if (i == nfiles) else ''
             all.write("bsub -q 8nh -J %s -o var/log/%s %s < %s\n" % (tag,tag,doEmail,submit_name))
 
             condor_name = "var/submit/%s.job" % tag
@@ -62,11 +62,16 @@ def WriteVariations(variations,process,nfiles) :
             condor.write("condor_submit %s.job\n" % (tag))
 
 ## nominal
-h_variations = ['ggH_0.5_0.5','ggH_0.5_1','ggH_1_0.5','ggH_1_1','ggH_1_2','ggH_2_1','ggH_2_2']
-h_process = 'gg_H'
-h_nfiles = 20
+h_variations = ['ggH_1_1']
+h_process = 'ggH8TeV'
+h_nfiles = 500
 WriteVariations(h_variations,h_process,h_nfiles)
 
+h_variations = ['VBF_1_1']
+h_process = 'VBF8TeV'
+h_nfiles = 2000
+WriteVariations(h_variations,h_process,h_nfiles)
+'''
 ## hfact
 h_variations = ['ggH_hfact_0.5_0.5','ggH_hfact_0.5_1','ggH_hfact_1_0.5','ggH_hfact_1_1','ggH_hfact_1_2','ggH_hfact_2_1','ggH_hfact_2_2']
 h_process = 'ggH_hfact'
@@ -90,6 +95,7 @@ hjj_variations = ['minlo_HJJ_mH125_0.5_0.5','minlo_HJJ_mH125_0.5_1','minlo_HJJ_m
 hjj_process = 'minlo_HJJ_mH125'
 hjj_nfiles = 10
 WriteVariations(hjj_variations,hjj_process,hjj_nfiles)
+'''
 
 
 all.close()

@@ -7,15 +7,15 @@
 Main:numberOfEvents = 50000        ! number of events to generate
 Main:timesAllowErrors = 3          ! abort run after this many flawed events
 Random:setSeed = on                ! set the seed by hand
-Main:numberToList = 0              ! number of events to print
-Main:timesToShow = 100             ! show how far along run is
-Main:showChangedSettings = on      ! print changed flags/modes/parameters
-Main:showChangedParticleData = on  ! print changed particle and decay data
+Next:numberShowEvent = 0           ! number of events to print
+Next:numberCount = 1000            ! show how far along run is
+Init:showChangedSettings = on      ! print changed flags/modes/parameters
+Init:showChangedParticleData = on  ! print changed particle and decay data
 
 ! 2) Beam parameter settings. Values below agree with default ones.
 Beams:idA = 2212                   ! first beam, p = 2212, pbar = -2212
 Beams:idB = 2212                   ! second beam, p = 2212, pbar = -2212
-Beams:eCM = 8000                   ! CM energy of collision
+Beams:eCM = 13000                   ! CM energy of collision
 
 ! 3) Settings for the hard-process generation.
 HiggsSM:all = off                  ! turn off all Higgs production processes
@@ -35,14 +35,13 @@ Tune:pp = 5                        ! the set of tunes to use (overwrites the PDF
 !Tune:pp = 7                       ! ATLAS Tune A2 (based on tune 4Cx, but without rapidity-ordered spacelike emissions)
 !Tune:pp = 11                      ! use Tune CT10
 
-PDF:useLHAPDF = on
-PDF:LHAPDFset = cteq6ll.LHpdf
+!PDF:pSet = LHAPDF6:CTEQ6L1
 SpaceShower:rapidityOrder=0
 
 ! 6) Change the particle properties
 ! Higgs mass and decays
-25:m0 = 125                         ! set Higgs mass
-25:mWidth = 0.00407
+25:m0 = 125.09                         ! set Higgs mass
+25:mWidth = 0.00409
 25:doForceWidth = true
 
 25:mayDecay = On                    ! off = don't allow the Higgs to decay

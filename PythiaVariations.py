@@ -49,7 +49,7 @@ def WriteVariations(variations,process,nfiles,nevents) :
                 #                           cd %s,cd %s      ,%s.cmnd, %d    ,%s/var/    ,%s.root
             st = os.stat(submit_name).st_mode
             os.chmod(submit_name, st | stat.S_IEXEC)
-            doEmail = '-N -u \"kurt.brendlinger@gmail.com\"' if (i == nfiles) else ''
+            doEmail = '-N -u \"bijanh@sas.upenn.com\"' if (i == nfiles) else ''
             all.write("bsub -q 8nh -J %s -o var/log/%s %s < %s\n" % (tag,tag,doEmail,submit_name))
 
             condor_name = "var/submit/%s.job" % tag
@@ -60,22 +60,28 @@ def WriteVariations(variations,process,nfiles,nevents) :
             condor.write("condor_submit %s.job\n" % (tag))
 
 ## WH
-h_variations = ['WH_0.5_0.5','WH_0.5_1','WH_1_0.5','WH_1_1','WH_1_2','WH_2_1','WH_2_2']
+h_variations = ['WH_1_1']
 h_process = 'WH'
 h_nfiles  = 12
 h_nevents = 50000
 WriteVariations(h_variations,h_process,h_nfiles,h_nevents)
 
 ## ZH
-h_variations = ['ZH_0.5_0.5','ZH_0.5_1','ZH_1_0.5','ZH_1_1','ZH_1_2','ZH_2_1','ZH_2_2']
+h_variations = ['ZH_1_1']
 h_process = 'ZH'
 h_nfiles = 30
 h_nevents = 2500
 WriteVariations(h_variations,h_process,h_nfiles,h_nevents)
 
 ## ttH
-h_variations = ['ttH_0.5_0.5','ttH_0.5_1','ttH_1_0.5','ttH_1_1','ttH_1_2','ttH_2_1','ttH_2_2']
+h_variations = ['ttH_1_1']
 h_process = 'ttH'
+h_nfiles = 12
+h_nevents = 50000
+WriteVariations(h_variations,h_process,h_nfiles,h_nevents)
+
+h_variations = ['bbH_1_1']
+h_process = 'bbH'
 h_nfiles = 12
 h_nevents = 50000
 WriteVariations(h_variations,h_process,h_nfiles,h_nevents)
