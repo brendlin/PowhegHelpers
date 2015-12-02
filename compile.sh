@@ -10,7 +10,7 @@ exec2=get_pdfreweight.exe
 #   # Set to paths
 # pythia="-I$swdir/Pythia8/include -I$swdir/Pythia8/include/Pythia8 -L$swdir/Pythia8/lib/archive -I$swdir/HepMC/include -lpythia8 -lpythia8tohepmc -L$swdir/HepMC/lib -lHepMC -lgfortran "
 # # -lgfortranbegin
-fastjet="-I$swdir/fastjet/include -L/home/bijanh/ZZextrapolation/fastjet/lib -lfastjet"
+fastjet="-I$swdir/fastjet/include -L$swdir/fastjet/lib -lfastjet"
 # lhapdf="-L/afs/cern.ch/sw/lcg/external/MCGenerators/lhapdf/5.8.9/x86_64-slc6-gcc46-opt/lib/archive -lLHAPDF"
 # #lhapdf="-L$swdir/LHApdf/lib/ -lLHAPDF"
 # yaml="-L$swdir/yaml/lib/"
@@ -23,7 +23,7 @@ fastjet="-I$swdir/fastjet/include -L/home/bijanh/ZZextrapolation/fastjet/lib -lf
 
 flags="-O2 -ansi -pedantic -W -Wall -Wshadow -Wno-shadow"
 
-includes="-I$swdir/Pythia8/include -I/home/bijanh/ZZextrapolation/HepMC/include -I$swdir/lhapdf/include"
+includes="-I$swdir/Pythia8/include -I$swdir/HepMC/include -I$swdir/lhapdf/include"
 libs="-L$swdir/Pythia8/lib -lpythia8"
 libs+=" -L$swdir/lhapdf/lib -lLHAPDF"
 #libs+=" -L/afs/cern.ch/sw/lcg/external/MCGenerators/lhapdf/5.8.9/x86_64-slc5-gcc43-opt/lib/archive -lLHAPDF"
