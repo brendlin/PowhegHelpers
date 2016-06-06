@@ -64,12 +64,12 @@ def WriteVariations(variations,process,nfiles) :
 ## nominal
 h_variations = ['ggH_1_1']
 h_process = 'ggH13TeV'
-h_nfiles = 500
+h_nfiles = 1200
 WriteVariations(h_variations,h_process,h_nfiles)
 
 h_variations = ['VBF_1_1']
 h_process = 'VBF13TeV'
-h_nfiles = 2000
+h_nfiles = 4000
 WriteVariations(h_variations,h_process,h_nfiles)
 '''
 ## hfact
