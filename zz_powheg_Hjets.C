@@ -174,6 +174,7 @@ int main(int argc, char* argv[]) {
   else if (process=="ggH"            ) Npartons=1;
   else if (process=="ggH_12509"      ) Npartons=1;
   else if (process=="ggH8TeV"        ) Npartons=1;
+  else if (process=="ggH13TeV"        ) Npartons=1;
   else if (process=="ggH_hfact"      ) Npartons=1;
   else if (process=="gg_H_hfact"     ) Npartons=1;
   else if (process=="minlo_HJ_mH125" ) Npartons=2;
@@ -181,6 +182,7 @@ int main(int argc, char* argv[]) {
   else if (process=="VBFH125"        ) Npartons=3;
   else if (process=="VBF_12509"      ) Npartons=3;
   else if (process=="VBF8TeV"        ) Npartons=3;
+  else if (process=="VBF13TeV"        ) Npartons=3;
   // more
   else if (process=="WH")  Npartons=2;
   else if (process=="ZH")  Npartons=2;
