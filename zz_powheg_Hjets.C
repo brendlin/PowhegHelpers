@@ -468,7 +468,8 @@ int main(int argc, char* argv[]) {
       w_nnpd = 0;
     }
 */
-     
+    LHAPDF::setVerbosity(0);
+    if (iEvent&&iEvent%100==0) LHAPDF::setVerbosity(1);
     if (iEvent&&iEvent%100==0) printf(">>>>>>>>>>>>> ");
     const LHAPDF::PDF* testpdf = LHAPDF::mkPDF("CT14nlo",0);
     //const LHAPDF::PDF* testpdf = LHAPDF::mkPDF("cteq6l1",0);
