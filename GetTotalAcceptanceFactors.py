@@ -34,23 +34,23 @@ def tot_acc(iw,tggF,tVBF,tWH,tZH,tttH):
 xsecs=[43.92,3.748,1.380,0.8696,0.5085]
 
 #fggF = TFile.Open("13TeV_RelIsoCut/Hyy_PowhegPythia8_ggF.root","read")
-fggF = TFile.Open("var/out/hadded/ggF_1_1_13TeV.root","read")
+fggF = TFile.Open("var/out/hadded/ggH_1_1.root","read")
 tggF = fggF.Get("EvtTree")
 
 #fVBF = TFile.Open("13TeV_RelIsoCut/Hyy_PowhegPythia8_VBF.root","read")
-fVBF = TFile.Open("var/out/hadded/VBF_1_1_13TeV.root","read")
+fVBF = TFile.Open("var/out/hadded/VBF_1_1.root","read")
 tVBF = fVBF.Get("EvtTree")
 
 #fWH = TFile.Open("13TeV_RelIsoCut/Hyy_Pythia8_WH.root","read")
-fWH = TFile.Open("var/out/hadded/WH_1_1_13TeV.root","read")
+fWH = TFile.Open("var/out/hadded/WH_1_1.root","read")
 tWH = fWH.Get("EvtTree")
 
 #fZH = TFile.Open("13TeV_RelIsoCut/Hyy_Pythia8_ZH.root","read")
-fZH = TFile.Open("var/out/hadded/ZH_1_1_13TeV.root","read")
+fZH = TFile.Open("var/out/hadded/ZH_1_1.root","read")
 tZH = fZH.Get("EvtTree")
 
 #fttH = TFile.Open("13TeV_RelIsoCut/Hyy_Pythia8_ttH.root","read")
-fttH = TFile.Open("var/out/hadded/ttH_1_1_13TeV.root","read")
+fttH = TFile.Open("var/out/hadded/ttH_1_1.root","read")
 tttH = fttH.Get("EvtTree")
 
 acc_VBF = acc(tVBF,"weight_0")
