@@ -187,6 +187,7 @@ int main(int argc, char* argv[]) {
   else if (process=="WH")  Npartons=2;
   else if (process=="ZH")  Npartons=2;
   else if (process=="ttH") Npartons=3;
+  else if (process=="bbH") Npartons=3;
   else if (process=="WH_mH125")  Npartons=2;
   else if (process=="ZH_mH125")  Npartons=2;
   else if (process=="ttH_mH125") Npartons=3;
@@ -468,20 +469,22 @@ int main(int argc, char* argv[]) {
     }
 */
      
-    printf(">>>>>>>>>>>>> ");
+    if (iEvent&&iEvent%100==0) printf(">>>>>>>>>>>>> ");
     const LHAPDF::PDF* testpdf = LHAPDF::mkPDF("CT14nlo",0);
     //const LHAPDF::PDF* testpdf = LHAPDF::mkPDF("cteq6l1",0);
     const double xf = testpdf->xfxQ2(mcevt_pdf_id1,mcevt_pdf_x1,mcevt_pdf_scale2);
-    printf("<<<<<<<<<<<<< xf = %2.5f >>>>>>>>>>>>>>\n",xf);
+    if (iEvent&&iEvent%100==0) printf("<<<<<<<<<<<<< xf = %2.5f >>>>>>>>>>>>>>\n",xf);
 
     _fmap["weight"] = pythia.info.weight();
     double mergingweight = pythia.info.mergingWeight();
     double weight = _fmap["weight"];
     
     int nwgt = pythia.info.getWeightsDetailedSize();
-    printf("<<<<<<<<<<<<< weight = %2.5f >>>>>>>>>>>>>>\n",weight);
-    printf("<<<<<<<<<<<<< MergingWeight = %2.5f >>>>>>>>>>>>>>\n",mergingweight);
-    printf("<<<<<<<<<<<<< nwgt = %d >>>>>>>>>>>>>>\n",nwgt);
+    if (iEvent&&iEvent%100==0){
+    	printf("<<<<<<<<<<<<< weight = %2.5f >>>>>>>>>>>>>>\n",weight);
+    	printf("<<<<<<<<<<<<< MergingWeight = %2.5f >>>>>>>>>>>>>>\n",mergingweight);
+    	printf("<<<<<<<<<<<<< nwgt = %d >>>>>>>>>>>>>>\n",nwgt);
+    }
     for(int iwgt = 0;iwgt<nwgt;iwgt++){
       string key;
       string weight_str;
@@ -998,6 +1001,7 @@ int main(int argc, char* argv[]) {
 
     _ot->Fill();
     
+  delete testpdf;
   } // for each event
 
   printf("Number of FSR events: %d",nFSRevents);
