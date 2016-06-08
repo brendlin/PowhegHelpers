@@ -69,8 +69,8 @@ WriteVariations(h_variations,h_process,h_nfiles,h_nevents)
 ## ZH
 h_variations = ['ZH_1_1']
 h_process = 'ZH'
-h_nfiles = 30
-h_nevents = 2500
+h_nfiles = 60
+h_nevents = 1250
 WriteVariations(h_variations,h_process,h_nfiles,h_nevents)
 
 ## ttH

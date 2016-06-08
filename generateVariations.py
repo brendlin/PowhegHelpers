@@ -36,7 +36,7 @@ source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
 localSetupROOT --skipConfirm
 cd %s
 source ASETUP
-./zz_powheg_hgg.exe pythia_settings/zz_nominal.cmnd /afs/cern.ch/work/b/bhaney/public/LHE/%s/%s/PowhegOTF._%04d.events -1 %s/var/out/%s.root
+./zz_powheg_hgg.exe pythia_settings/zz_nominal.cmnd /disk/userdata00/atlas_data2/bijanh/HZZRun2/LHE/%s/%s/PowhegOTF._%04d.events -1 %s/var/out/%s.root
 
 
 echo done.

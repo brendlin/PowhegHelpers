@@ -19,11 +19,11 @@ using namespace Pythia8;
 using namespace std;
 
 class Scaling : public PDF{
-public:
-  Scaling(int idBeamIn = 2212) : PDF(idBeamIn) {}
+  public:
+    Scaling(int idBeamIn = 2212) : PDF(idBeamIn) {}
 
-private:
-  void xfUpdate(int id, double x, double Q2);
+  private:
+    void xfUpdate(int id, double x, double Q2);
 };
 void Scaling::xfUpdate(int, double x, double ) {
   double dv  = 4. * x * pow3(1. - x);
@@ -515,7 +515,6 @@ int main(int argc, char* argv[]) {
 //      printf("\twgt id=\'%s\'\t%2.5f\n",key,wgt_value);
       std::cout<<"\twgt id="<<key<<"\t"<<wgt_value<<std::endl;
     }
-    
     double w_mstw = 1.;
     double w_nnpd = 1.;
 
@@ -661,6 +660,7 @@ int main(int argc, char* argv[]) {
     //
     if (ZZ_4l_filtered) {
       if(debug) printf("Daugher2 is not a muon or electron! ACTUALLY skipping the event.\n");
+      delete testpdf;
       iEvent--;
       continue;
     }

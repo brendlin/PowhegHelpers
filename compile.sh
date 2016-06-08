@@ -50,6 +50,7 @@ settings=pythia_settings/zz_nominal.cmnd
 Nevts=20
 
 ggF_H0j=/afs/cern.ch/work/b/bhaney/public/LHE/ggH13TeV/ggH_1_1/PowhegOTF._0001.events
+ggF_H0j=/disk/userdata00/atlas_data2/bijanh/HZZRun2/LHE/ggH13TeV/ggH_1_1/PowhegOTF._0001.events
 ggF_H1j=~/data/LesHouches/gg_HJ/baseline/pwgevents-0001.lhe
 ggF_H2j=~/data/LesHouches/gg_HJJ/baseline/pwgevents-0001.lhe
 vbf=~/data/LesHouches/vbf_H/baseline/pwgevents-0001.lhe
