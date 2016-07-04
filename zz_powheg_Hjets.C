@@ -1263,7 +1263,7 @@ std::vector<MCpart> chooseFidLeptons(std::vector<MCpart> leps){
   for (int i = 0; i < leps.size(); ++i) {
     if (leps.at(i).absID() == 13 && fabs(leps.at(i).Eta()) > 2.7 ) continue;
     if (leps.at(i).absID() == 11 && fabs(leps.at(i).Eta()) > 2.47) continue;
-    if (leps.at(i).absID() == 13 && leps.at(i).Pt()<6.) continue;
+    if (leps.at(i).absID() == 13 && leps.at(i).Pt()<5.) continue;
     if (leps.at(i).absID() == 11 && leps.at(i).Pt()<7.) continue;
     if (debug) printf("Adding a fiducial lepton with id %d and Pt %2.2f\n",leps.at(i).ID(),leps.at(i).Pt());
     tmp.push_back(leps.at(i));
@@ -1276,7 +1276,7 @@ vector<MCpart> ElectronMuonCuts(vector<MCpart> leps){
   for (int i = 0; i < leps.size(); ++i) {
     if (leps.at(i).absID() == 13 && fabs(leps.at(i).Eta()) > 2.7) continue;
     if (leps.at(i).absID() == 11 && fabs(leps.at(i).Eta()) > 2.47) continue;
-    if (leps.at(i).absID() == 13 && leps.at(i).Pt() < 6.) continue;
+    if (leps.at(i).absID() == 13 && leps.at(i).Pt() < 5.) continue;
     if (leps.at(i).absID() == 11 && leps.at(i).Pt() < 7.) continue;
     tmp.push_back(leps.at(i));
   }
