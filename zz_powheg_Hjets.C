@@ -373,8 +373,10 @@ int main(int argc, char* argv[]) {
   // For pdf reweighting, to be done later
   MakeFBranches("mcevt_pdf_scale2","mcevt_pdf_x1","mcevt_pdf_x2");
   MakeIBranches("mcevt_pdf_id1","mcevt_pdf_id2");
+  //Nominal PDF is CT14
   MakeFBranch("weight_0");
   
+  //8 scale variations (1, 0.5, 2) x (1,0.5,2).  (1,1) is weight_0
   MakeFBranch("weight_1001");
   MakeFBranch("weight_1002");
   MakeFBranch("weight_1003");
@@ -383,12 +385,30 @@ int main(int argc, char* argv[]) {
   MakeFBranch("weight_1006");
   MakeFBranch("weight_1007");
   MakeFBranch("weight_1008");
-  MakeFBranch("weight_2001");MakeFBranch("weight_2002");MakeFBranch("weight_2003");MakeFBranch("weight_2004");MakeFBranch("weight_2005");MakeFBranch("weight_2006");MakeFBranch("weight_2007");MakeFBranch("weight_2008");MakeFBranch("weight_2009");MakeFBranch("weight_2010");
-  MakeFBranch("weight_2011");MakeFBranch("weight_2012");MakeFBranch("weight_2013");MakeFBranch("weight_2014");MakeFBranch("weight_2015");MakeFBranch("weight_2016");MakeFBranch("weight_2017");MakeFBranch("weight_2018");MakeFBranch("weight_2019");MakeFBranch("weight_2020");
-  MakeFBranch("weight_2021");MakeFBranch("weight_2022");MakeFBranch("weight_2023");MakeFBranch("weight_2024");MakeFBranch("weight_2025");MakeFBranch("weight_2026");MakeFBranch("weight_2027");MakeFBranch("weight_2028");MakeFBranch("weight_2029");MakeFBranch("weight_2030");
-  MakeFBranch("weight_2031");MakeFBranch("weight_2032");MakeFBranch("weight_2033");MakeFBranch("weight_2034");MakeFBranch("weight_2035");MakeFBranch("weight_2036");MakeFBranch("weight_2037");MakeFBranch("weight_2038");MakeFBranch("weight_2039");MakeFBranch("weight_2040");
-  MakeFBranch("weight_2041");MakeFBranch("weight_2042");MakeFBranch("weight_2043");MakeFBranch("weight_2044");MakeFBranch("weight_2045");MakeFBranch("weight_2046");MakeFBranch("weight_2047");MakeFBranch("weight_2048");MakeFBranch("weight_2049");MakeFBranch("weight_2050");
-  MakeFBranch("weight_2051");MakeFBranch("weight_2052");MakeFBranch("weight_2053");MakeFBranch("weight_2054");MakeFBranch("weight_2055");MakeFBranch("weight_2056");MakeFBranch("weight_2057");MakeFBranch("weight_2058");MakeFBranch("weight_2059");
+  //1 thru 56 are CT14 eigenvector variations
+  MakeFBranch("weight_2001");MakeFBranch("weight_2002");MakeFBranch("weight_2003");MakeFBranch("weight_2004");
+  MakeFBranch("weight_2005");MakeFBranch("weight_2006");MakeFBranch("weight_2007");MakeFBranch("weight_2008");
+  MakeFBranch("weight_2009");MakeFBranch("weight_2010");
+  MakeFBranch("weight_2011");MakeFBranch("weight_2012");MakeFBranch("weight_2013");MakeFBranch("weight_2014");
+  MakeFBranch("weight_2015");MakeFBranch("weight_2016");MakeFBranch("weight_2017");MakeFBranch("weight_2018");
+  MakeFBranch("weight_2019");MakeFBranch("weight_2020");
+  MakeFBranch("weight_2021");MakeFBranch("weight_2022");MakeFBranch("weight_2023");MakeFBranch("weight_2024");
+  MakeFBranch("weight_2025");MakeFBranch("weight_2026");MakeFBranch("weight_2027");MakeFBranch("weight_2028");
+  MakeFBranch("weight_2029");MakeFBranch("weight_2030");
+  MakeFBranch("weight_2031");MakeFBranch("weight_2032");MakeFBranch("weight_2033");MakeFBranch("weight_2034");
+  MakeFBranch("weight_2035");MakeFBranch("weight_2036");MakeFBranch("weight_2037");MakeFBranch("weight_2038");
+  MakeFBranch("weight_2039");MakeFBranch("weight_2040");
+  MakeFBranch("weight_2041");MakeFBranch("weight_2042");MakeFBranch("weight_2043");MakeFBranch("weight_2044");
+  MakeFBranch("weight_2045");MakeFBranch("weight_2046");MakeFBranch("weight_2047");MakeFBranch("weight_2048");
+  MakeFBranch("weight_2049");MakeFBranch("weight_2050");
+  MakeFBranch("weight_2051");MakeFBranch("weight_2052");MakeFBranch("weight_2053");MakeFBranch("weight_2054");
+  MakeFBranch("weight_2055");MakeFBranch("weight_2056");
+  //CT10 PDF
+  MakeFBranch("weight_2057");
+  //MMHT2014
+  MakeFBranch("weight_2058");
+  //NNPDF3.0
+  MakeFBranch("weight_2059");
   
   
   // _fmap["xsec"] = xsecs[scale_shift_index]; 
